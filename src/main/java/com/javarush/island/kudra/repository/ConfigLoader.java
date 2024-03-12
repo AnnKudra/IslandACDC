@@ -18,7 +18,7 @@ public class ConfigLoader {
 
     public static URL getConfigFilePath(Class<? extends Organism> type) {
         Config config = type.getAnnotation(Config.class);
-        return type.getClassLoader().getResource(config.fileName());
+        return type.getClassLoader().getResource(config.filePath());
     }
     public static Organism loadObject(URL filePath, Class<? extends Organism> type){
         YAMLMapper mapper = new YAMLMapper();
