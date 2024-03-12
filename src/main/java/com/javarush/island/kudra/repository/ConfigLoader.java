@@ -1,8 +1,9 @@
-package com.javarush.island.kudra.utils;
+package com.javarush.island.kudra.repository;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.javarush.island.kudra.abstraction.Organism;
 import com.javarush.island.kudra.exception.ApplicationException;
+import com.javarush.island.kudra.utils.Config;
 
 import java.net.URL;
 

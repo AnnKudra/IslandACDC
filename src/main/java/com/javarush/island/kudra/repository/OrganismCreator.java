@@ -1,4 +1,4 @@
-package com.javarush.island.kudra.utils;
+package com.javarush.island.kudra.repository;
 
 
 
