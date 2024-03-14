@@ -1,7 +1,10 @@
 package com.javarush.island.kudra.entity.map;
 
 
+import lombok.Getter;
+
 public class GameMap {
+    @Getter
     private final Cell[][] cells;
     private final int rows;
     private final int cols;
@@ -22,9 +25,6 @@ public class GameMap {
                 cells[row][col].searchAvailableCells(this, row, col);
             }
         }
-    }
-    public Cell[][] getCells(){
-        return cells;
     }
     public int getRow(){
         return rows;

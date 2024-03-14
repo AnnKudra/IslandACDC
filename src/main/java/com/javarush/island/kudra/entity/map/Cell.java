@@ -3,8 +3,7 @@ package com.javarush.island.kudra.entity.map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 public class Cell {
     private final List<Cell> availableCells = new ArrayList<>();
