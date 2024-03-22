@@ -1,6 +1,6 @@
-name:
-icon:
-maxWeight:
-maxAmount:
-maxSpeed:
-maxFood:
+name:Mouse
+icon:\uD83D\uDC01
+maxWeight:0.05
+maxAmount:500
+maxSpeed:1
+maxFood:0.01

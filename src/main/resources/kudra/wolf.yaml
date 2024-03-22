@@ -1,6 +1,6 @@
-name:
-icon:
-maxWeight:
-maxAmount:
-maxSpeed:
-maxFood:
+name:Wolf
+icon:\uD83D\uDC3A
+maxWeight:50
+maxAmount:30
+maxSpeed:3
+maxFood:8
