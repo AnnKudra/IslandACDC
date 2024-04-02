@@ -14,7 +14,12 @@ public abstract class AbstractService implements Runnable{
     }
     private Set<Organism> getSafeSet(Cell cell){
         cell.getLock().lock();
-        Set<Organism> organismSet = cell.getOrganismSet();
-        return new HashSet<>(organismSet);
+        try {
+            Set<Organism> organismSet = cell.getOrganismSet();
+            return new HashSet<>(organismSet);
+        }
+        finally {
+            cell.getLock().unlock();
+        }
     }
 }

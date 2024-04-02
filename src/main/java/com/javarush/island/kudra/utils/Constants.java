@@ -12,7 +12,10 @@ public class Constants {
     private Constants(){
         initFoodMap();
     }
-       public static final String[] ORGANISM_NAME = {
+    public static final int BREEDING_PAIR = 2;
+    public static final double NORM_WEIGHT_FACTOR = 80/100;
+    public static final double WEIGHT_LOSS_PERCENT = 0.01;
+    public static final String[] ORGANISM_NAME = {
             "Wolf", "Snake", "Fox", "Bear", "Eagle",
             "Horse", "Deer", "Rabbit", "Mouse", "Goat",
             "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar", "Grass"};
@@ -26,7 +29,7 @@ public class Constants {
 //            Sheep.class, Boar.class, Buffalo.class, Duck.class, Caterpillar.class,
 //            Grass.class};
 };
-public static final int[][] EATING_PROBABILITY = {
+    public static final int[][] EATING_PROBABILITY = {
         {0, 0, 0, 0, 0, 10, 15, 60, 80, 60, 70, 15, 10, 40, 0, 0},
         {0, 0, 15, 0, 0, 0, 0, 20, 40, 0, 0, 0, 0, 10, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 70, 90, 0, 0, 0, 0, 60, 40, 0},
@@ -43,13 +46,13 @@ public static final int[][] EATING_PROBABILITY = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90, 100},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100}
 };
-@Getter
-    private Map<String, Map<String, Integer>> foodMap = new HashMap<>();
+    @Getter
+    private static final Map<String, Map<String, Integer>> FOOD_MAP = new HashMap<>();
     private void initFoodMap(){
         for (int i = 0; i < EATING_PROBABILITY.length; i++) {
             String name = ORGANISM_NAME[i];
             Map<String, Integer> dietAsPercentage = new HashMap<>();
-            foodMap.put(name, dietAsPercentage);
+            FOOD_MAP.put(name, dietAsPercentage);
             for (int j = 0; j < EATING_PROBABILITY[i].length; j++) {
                 int percent = EATING_PROBABILITY[i][j];
                 if (percent == 0) {

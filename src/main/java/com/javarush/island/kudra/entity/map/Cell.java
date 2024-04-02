@@ -2,6 +2,7 @@ package com.javarush.island.kudra.entity.map;
 
 
 import com.javarush.island.kudra.abstraction.Organism;
+import com.javarush.island.kudra.utils.Randomizer;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -34,5 +35,14 @@ public class Cell {
         if (col< gameMap.getCol()-1){
             availableCells.add(cells[row][col+1]);
         }
+    }
+    public Cell findNextCell(Cell cell, int speed) {
+        Cell nextCell = cell;
+        for (int i = 0; i < speed; i++) {
+            int countOfAvailableCells = nextCell.getAvailableCells().size();
+            int indexOfNextCell = Randomizer.getRandom(countOfAvailableCells);
+            nextCell = nextCell.getAvailableCells().get(indexOfNextCell);
+        }
+        return nextCell;
     }
 }
