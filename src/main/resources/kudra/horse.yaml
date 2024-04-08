@@ -1,0 +1,6 @@
+name: Horse
+icon: \uD83D\uDC0E
+maxWeight: 400
+maxCount: 20
+maxSpeed: 4
+maxFood: 60

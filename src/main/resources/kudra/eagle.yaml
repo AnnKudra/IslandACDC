@@ -1,0 +1,6 @@
+name: Eagle
+icon: \uD83E\uDD85
+maxWeight: 6
+maxCount: 20
+maxSpeed: 3
+maxFood: 1

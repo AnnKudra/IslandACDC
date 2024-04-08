@@ -5,7 +5,9 @@ package com.javarush.island.kudra.repository;
 import com.javarush.island.kudra.abstraction.Organism;
 import com.javarush.island.kudra.entity.organism.animal.herbivores.Mouse;
 import com.javarush.island.kudra.entity.organism.animal.predators.Wolf;
+import com.javarush.island.kudra.entity.organism.plant.Grass;
 import com.javarush.island.kudra.exception.ApplicationException;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,12 +15,15 @@ import java.util.Map;
 import java.util.Set;
 
 public class OrganismCreator {
+    @Getter
     private static final Set<Class<? extends Organism>> TYPES = new HashSet<>();
+    @Getter
     private static final Map<Class<? extends Organism>, Organism> PROTOTYPES = new HashMap<>();
 
     static {
         TYPES.add(Mouse.class);
         TYPES.add(Wolf.class);
+        TYPES.add(Grass.class);
         fillingWithPrototypes();
     }
     private static void fillingWithPrototypes(){

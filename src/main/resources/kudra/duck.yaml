@@ -1,0 +1,6 @@
+name: Duck
+icon: \uD83E\uDD86
+maxWeight: 1
+maxCount: 200
+maxSpeed: 4
+maxFood: 0.15

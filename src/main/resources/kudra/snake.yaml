@@ -1,0 +1,6 @@
+name: Snake
+icon: \uD83D\uDC0D
+maxWeight: 15
+maxCount: 30
+maxSpeed: 1
+maxFood: 3

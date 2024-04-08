@@ -1,0 +1,6 @@
+name: Fox
+icon: \uD83E\uDD8A
+maxWeight: 8
+maxCount: 30
+maxSpeed: 2
+maxFood: 2

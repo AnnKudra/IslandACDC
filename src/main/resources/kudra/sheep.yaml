@@ -1,0 +1,6 @@
+name: Sheep
+icon: \uD83D\uDC11
+maxWeight: 70
+maxCount: 140
+maxSpeed: 3
+maxFood: 15

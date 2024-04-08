@@ -17,9 +17,9 @@ public abstract class Animal extends Organism {
         this.maxSpeed = maxSpeed;
     }
     @Getter
-    private final double maxFood;
+    final double maxFood;
     @Getter
-    private final int maxSpeed;
+    final int maxSpeed;
     @Override
     public boolean reproduce(Cell cell) {
         if (!isHere(cell) || isMaxCountOfOrganismsIn(cell) || !canReproduce(cell))
@@ -63,8 +63,7 @@ public abstract class Animal extends Organism {
             if (foodTypes.containsKey(organism.getName()))
                 prey.put(organism, foodTypes.get(organism.getName()));
         }
-        Map.Entry<Organism, Integer> caughtOnePrey = prey.entrySet().stream().findAny().orElse(null);
-            return caughtOnePrey;
+            return prey.entrySet().stream().findAny().orElse(null);
     }
         finally {
             cell.getLock().unlock();

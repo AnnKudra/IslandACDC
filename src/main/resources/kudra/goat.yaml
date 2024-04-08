@@ -1,0 +1,6 @@
+name: Goat
+icon: \uD83D\uDC10
+maxWeight: 6
+maxCount: 140
+maxSpeed: 3
+maxFood: 10

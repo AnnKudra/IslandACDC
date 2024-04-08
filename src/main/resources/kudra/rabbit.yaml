@@ -1,0 +1,6 @@
+name: Rabbit
+icon: \uD83D\uDC07
+maxWeight: 2
+maxCount: 150
+maxSpeed: 2
+maxFood: 0.45

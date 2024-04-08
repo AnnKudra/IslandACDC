@@ -1,0 +1,6 @@
+name: Boar
+icon: \uD83D\uDC17
+maxWeight: 400
+maxCount: 50
+maxSpeed: 2
+maxFood: 50

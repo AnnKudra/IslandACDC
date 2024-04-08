@@ -1,0 +1,6 @@
+name: Bear
+icon: \uD83E\uDDF8
+maxWeight: 500
+maxCount: 5
+maxSpeed: 2
+maxFood: 80

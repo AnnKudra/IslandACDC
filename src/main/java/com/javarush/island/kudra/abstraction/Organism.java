@@ -37,12 +37,15 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
         clone.setWeight(weight);
         return clone;
     }
+    @Override
     public boolean eat(Cell cell){
         return false;
     }
+    @Override
     public boolean move(Cell cell){
         return false;
     }
+    @Override
     public boolean reproduce(Cell cell) {
         if (!isHere(cell) || isMaxCountOfOrganismsIn(cell))
             return false;
