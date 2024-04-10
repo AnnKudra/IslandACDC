@@ -3,6 +3,7 @@ package com.javarush.island.kudra.utils;
 import com.javarush.island.kudra.abstraction.Organism;
 import com.javarush.island.kudra.entity.organism.animal.herbivores.*;
 import com.javarush.island.kudra.entity.organism.animal.predators.*;
+import com.javarush.island.kudra.entity.organism.plant.Grass;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -22,19 +23,15 @@ public class Constants {
     public static final int COUNT_OF_CORES = Runtime.getRuntime().availableProcessors();
 
     public static final String[] ORGANISM_NAME = {
-            "Wolf", "Snake", "Fox", "Bear", "Eagle",
-            "Horse", "Deer", "Rabbit", "Mouse", "Goat",
-            "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar", "Grass"};
+            "Wolf",
+            //"Snake", "Fox", "Bear", "Eagle", "Horse", "Deer", "Rabbit",
+            "Mouse",
+            //"Goat", "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar",
+            "Grass"};
 
     public static final Class<? extends Organism>[] ORGANISM_CLASS_NAME = new Class[]{
-           Wolf.class,
-//            Snake.class, Fox.class, Bear.class, Eagle.class,
-//            Horse.class, Deer.class, Rabbit.class,
-            Mouse.class
-//            Goat.class,
-//            Sheep.class, Boar.class, Buffalo.class, Duck.class, Caterpillar.class,
-//            Grass.class};
-};
+           Wolf.class, Snake.class, Fox.class, Bear.class, Eagle.class, Horse.class, Deer.class, Rabbit.class,
+            Mouse.class, Goat.class, Sheep.class, Boar.class, Buffalo.class, Duck.class, Caterpillar.class, Grass.class};
     public static final int[][] EATING_PROBABILITY = {
         {0, 0, 0, 0, 0, 10, 15, 60, 80, 60, 70, 15, 10, 40, 0, 0},
         {0, 0, 15, 0, 0, 0, 0, 20, 40, 0, 0, 0, 0, 10, 0, 0},

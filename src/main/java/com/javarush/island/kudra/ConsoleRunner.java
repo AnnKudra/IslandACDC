@@ -3,7 +3,6 @@ package com.javarush.island.kudra;
 import com.javarush.island.kudra.entity.map.GameMap;
 import com.javarush.island.kudra.services.*;
 import com.javarush.island.kudra.utils.Constants;
-
 import java.util.List;
 
 public class ConsoleRunner {
