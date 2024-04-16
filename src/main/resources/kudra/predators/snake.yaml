@@ -1,5 +1,5 @@
 name: Snake
-icon: \uD83D\uDC0D
+icon: 🐍
 maxWeight: 15
 maxCount: 30
 maxSpeed: 1

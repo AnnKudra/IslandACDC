@@ -13,20 +13,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Organism implements Cloneable, Reproducible, Eating, Movable {
-    public Organism(String name, String icon, double maxWeight, int maxCount) {
-        this.name = name;
-        this.icon = icon;
-        this.maxWeight = maxWeight;
-        this.maxCount = maxCount;
-    }
     @Getter
-    private final String name;
+    @Setter
+    private String name;
     @Getter
-    private final String icon;
+    @Setter
+    private String icon;
     @Getter
-    private final double maxWeight;
+    @Setter
+    private double maxWeight;
     @Getter
-    private final int maxCount;
+    @Setter
+    private int maxCount;
     @Getter
     @Setter
     private double weight;

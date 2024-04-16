@@ -3,8 +3,8 @@ package com.javarush.island.kudra.repository;
 
 
 import com.javarush.island.kudra.abstraction.Organism;
-import com.javarush.island.kudra.entity.organism.animal.herbivores.Mouse;
-import com.javarush.island.kudra.entity.organism.animal.predators.Wolf;
+import com.javarush.island.kudra.entity.organism.animal.herbivores.*;
+import com.javarush.island.kudra.entity.organism.animal.predators.*;
 import com.javarush.island.kudra.entity.organism.plant.Grass;
 import com.javarush.island.kudra.exception.ApplicationException;
 import lombok.Getter;
@@ -24,6 +24,19 @@ public class OrganismCreator {
         TYPES.add(Mouse.class);
         TYPES.add(Wolf.class);
         TYPES.add(Grass.class);
+        TYPES.add(Bear.class);
+        TYPES.add(Boar.class);
+        TYPES.add(Buffalo.class);
+        TYPES.add(Caterpillar.class);
+        TYPES.add(Deer.class);
+        TYPES.add(Duck.class);
+        TYPES.add(Goat.class);
+        TYPES.add(Horse.class);
+        TYPES.add(Rabbit.class);
+        TYPES.add(Sheep.class);
+        TYPES.add(Eagle.class);
+        TYPES.add(Fox.class);
+        TYPES.add(Snake.class);
         fillingWithPrototypes();
     }
     private static void fillingWithPrototypes(){

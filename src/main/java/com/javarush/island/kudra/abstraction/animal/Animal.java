@@ -5,21 +5,19 @@ import com.javarush.island.kudra.entity.map.Cell;
 import com.javarush.island.kudra.utils.Constants;
 import com.javarush.island.kudra.utils.Randomizer;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public abstract class Animal extends Organism {
-    public Animal(String name, String icon, double maxWeight, int maxCount, double maxFood, int maxSpeed) {
-        super(name, icon, maxWeight, maxCount);
-        this.maxFood = maxFood;
-        this.maxSpeed = maxSpeed;
-    }
     @Getter
-    final double maxFood;
+    @Setter
+    private double maxFood;
     @Getter
-    final int maxSpeed;
+    @Setter
+    private int maxSpeed;
     @Override
     public boolean reproduce(Cell cell) {
         if (!isHere(cell) || isMaxCountOfOrganismsIn(cell) || !canReproduce(cell))
@@ -55,7 +53,7 @@ public abstract class Animal extends Organism {
     private Map.Entry<Organism, Integer> findFood(Cell cell){
         cell.getLock().lock();
         try {
-        Map<String, Integer> foodTypes =Constants.getFOOD_MAP().get(getName());
+        Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
         Set<Organism> organismSet = cell.getOrganismSet();
         Map<Organism, Integer> prey = new HashMap<>();
         for (Organism organism :

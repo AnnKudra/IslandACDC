@@ -16,14 +16,12 @@ public class ViewService implements Runnable{
         Map<String, Integer> statisticMap = gameMap.getStatistic();
         for (Map.Entry<String, Integer> entry : statisticMap.entrySet()) {
             sb.append(entry.getKey());
-            sb.append(" - ");
+            sb.append("-");
             sb.append(entry.getValue());
-            sb.append("; ");
-            sb.append("\n");
-            sb.append("-".repeat(100));
-            sb.append("\n");
+            sb.append(";");
             System.out.println(sb);
-        }
+            System.out.println("-".repeat(200));
+            }
 
     }
 }

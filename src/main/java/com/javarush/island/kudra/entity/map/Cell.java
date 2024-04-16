@@ -29,10 +29,10 @@ public class Cell {
         if (col>0){
             availableCells.add(cells[row][col-1]);
         }
-        if (row<gameMap.getRow()-1){
+        if (row<gameMap.getRows()-1){
             availableCells.add(cells[row+1][col]);
         }
-        if (col< gameMap.getCol()-1){
+        if (col< gameMap.getCols()-1){
             availableCells.add(cells[row][col+1]);
         }
     }

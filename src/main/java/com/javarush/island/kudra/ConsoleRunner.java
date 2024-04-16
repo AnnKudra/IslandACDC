@@ -12,7 +12,7 @@ public class ConsoleRunner {
         List<Runnable> services = List.of(
                 new RandomFillingService(gameMap),
                 new EatingService(gameMap),
-                new ReproducingService(gameMap),
+                //new ReproducingService(gameMap),
                 new MovingService(gameMap),
                 new ViewService(gameMap)
         );

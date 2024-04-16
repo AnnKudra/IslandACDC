@@ -1,4 +1,8 @@
 package com.javarush.island.kudra.entity.organism.animal.herbivores;
 
-public class Goat {
+import com.javarush.island.kudra.abstraction.animal.Herbivores;
+import com.javarush.island.kudra.utils.Config;
+
+@Config(filePath = "kudra/herbivores/goat.yaml")
+public class Goat extends Herbivores {
 }

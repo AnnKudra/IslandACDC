@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class GameMap {
     @Getter
     private final Cell[][] cells;
+    @Getter
     private final int rows;
+    @Getter
     private final int cols;
     @Getter
     public final Map<String, Integer> statistic;
@@ -41,7 +43,7 @@ public class GameMap {
     public void randomFilling(){
         for (Cell[] row : cells) {
             for (Cell cell : row) {
-                if (Randomizer.get(Constants.FILLING_FREQUENCY))
+                if (!Randomizer.get(Constants.FILLING_FREQUENCY))
                     continue;
                 cell.getLock().lock();
                 try {
@@ -52,8 +54,9 @@ public class GameMap {
                             collect(Collectors.toSet()).
                             size();
                     int maxAllowedQuantity =organism.getMaxCount();
-                    int randomAddedCount = Randomizer.getRandom(1, maxAllowedQuantity - countOfOrganismInCell);
-                    for (int i = 0; i < randomAddedCount; i++) {
+                    int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
+                    int randomCount = Randomizer.getRandom(valueDifference);
+                    for (int i = 0; i < randomCount; i++) {
                         Organism clone;
                         try {
                             clone = organism.clone();
@@ -101,10 +104,4 @@ public class GameMap {
             }
         }
     }
-    public int getRow(){
-        return rows;
-    }
-    public int getCol(){
-        return cols;
-    }
-}
+   }
