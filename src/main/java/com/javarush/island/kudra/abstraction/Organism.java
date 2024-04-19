@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public abstract class Organism implements Cloneable, Reproducible, Eating, Movable {
-    @Getter
     @Setter
     private String name;
     @Getter
@@ -45,23 +45,23 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
     }
     @Override
     public boolean reproduce(Cell cell) {
-        if (!isHere(cell) || isMaxCountOfOrganismsIn(cell))
+        if (isNotHere(cell))
             return false;
         List<Cell> availableCells = cell.getAvailableCells();
-        int randomIndex = Randomizer.getRandom(availableCells.size());
-        Cell nextCell = availableCells.get(randomIndex);
-        if (isMaxCountOfOrganismsIn(nextCell))
-            return false;
         Organism clone;
-        try {
-            clone = this.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
+        for (Cell availableCell : availableCells) {
+            if (isMaxCountOfOrganismsIn(availableCell))
+                return false;
+            try {
+                clone = this.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+            return addTo(availableCell, clone);
         }
-        return addTo(nextCell, clone);
+        return true;
     }
-
-    protected boolean addTo(Cell cell, Organism clone) {
+        protected boolean addTo(Cell cell, Organism clone) {
         cell.getLock().lock();
         try {
             Set<Organism> organismSet = cell.getOrganismSet();
@@ -89,11 +89,11 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
             cell.getLock().unlock();
         }
     }
-    protected boolean isHere(Cell cell){
+    protected boolean isNotHere(Cell cell){
     cell.getLock().lock();
         try {
             Set<Organism> organismSet = cell.getOrganismSet();
-            return organismSet.contains(this);
+            return !organismSet.contains(this);
         } finally {
             cell.getLock().unlock();
         }

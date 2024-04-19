@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Getter
 public abstract class Animal extends Organism {
-    @Getter
     @Setter
     private double maxFood;
     @Getter
@@ -20,13 +20,13 @@ public abstract class Animal extends Organism {
     private int maxSpeed;
     @Override
     public boolean reproduce(Cell cell) {
-        if (!isHere(cell) || isMaxCountOfOrganismsIn(cell) || !canReproduce(cell))
+        if (isNotHere(cell) || isMaxCountOfOrganismsIn(cell) || !canReproduce(cell))
             return false;
         Organism child;
         try {
             child = this.clone();
-            double childweight = getWeight()/2;
-            child.setWeight(childweight);
+            double childWeight = getWeight()/2;
+            child.setWeight(childWeight);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public abstract class Animal extends Organism {
     }
     @Override
     public boolean eat(Cell cell) {
-        if (!isHere(cell) || !isHungry())
+        if (isNotHere(cell) || !isHungry())
             return false;
         Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
         if (onePreyEntry == null || !caughtPrey(onePreyEntry))
@@ -88,9 +88,11 @@ public abstract class Animal extends Organism {
     }
     @Override
     public boolean move(Cell cell) {
-        if (!isHere(cell))
+        if (isNotHere(cell))
             return false;
         int speed = Randomizer.getRandom(getMaxSpeed()+1);
+        if (speed == 0)
+            return false;
         Cell nextCell = cell.findNextCell(cell,speed);
         if (isMaxCountOfOrganismsIn(nextCell))
             return false;
@@ -108,7 +110,7 @@ public abstract class Animal extends Organism {
             finally {
                 cell.getLock().unlock();
             }
-            double weightLoss = getWeight()/Constants.WEIGHT_LOSS_PERCENT;
+            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
             double weight = getWeight()-weightLoss;
             if (weight<=0)
                 nextCell.getOrganismSet().remove(this);

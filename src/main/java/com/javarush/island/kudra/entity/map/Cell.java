@@ -13,8 +13,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
+@Getter
 public class Cell {
-    @Getter
     private final List<Cell> availableCells = new ArrayList<>();
     @Getter
     private final Set<Organism> organismSet = new HashSet<>();
