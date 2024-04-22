@@ -30,7 +30,8 @@ public abstract class Animal extends Organism {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        return addTo(cell, child);
+        addTo(cell, child);
+        return true;
     }
     private boolean canReproduce(Cell cell) {
         int countOfOrganisms = countOfOrganisms(cell,this.getClass());
@@ -40,10 +41,11 @@ public abstract class Animal extends Organism {
     public boolean eat(Cell cell) {
         if (isNotHere(cell) || !isHungry())
             return false;
+        while (!isNotHere(cell)|| isHungry()){
         Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
         if (onePreyEntry == null || !caughtPrey(onePreyEntry))
             return false;
-        killAndEat(cell, onePreyEntry);
+        killAndEat(cell, onePreyEntry);}
         return true;
     }
     private boolean isHungry() {
@@ -110,11 +112,11 @@ public abstract class Animal extends Organism {
             finally {
                 cell.getLock().unlock();
             }
-            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
-            double weight = getWeight()-weightLoss;
-            if (weight<=0)
-                nextCell.getOrganismSet().remove(this);
-            setWeight(weight);
+//            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
+//            double weight = getWeight()-weightLoss;
+//            if (weight<=0)
+//                nextCell.getOrganismSet().remove(this);
+//            setWeight(weight);
         }
         finally {
             nextCell.getLock().unlock();

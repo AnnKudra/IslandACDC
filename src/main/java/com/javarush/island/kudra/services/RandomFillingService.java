@@ -6,9 +6,6 @@ import com.javarush.island.kudra.repository.OrganismCreator;
 import com.javarush.island.kudra.utils.Constants;
 import com.javarush.island.kudra.utils.Randomizer;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class RandomFillingService extends AbstractService {
     private final Cell[][] cells;
 
@@ -29,26 +26,8 @@ public class RandomFillingService extends AbstractService {
                 cell.getLock().lock();
                 try {
                     Organism organism = getRandomOrganism();
-                    Set<Organism> organismSet = cell.getOrganismSet();
-                    int countOfOrganismInCell = organismSet.stream().
-                            filter(o->o.getClass().equals(organism.getClass())).
-                            collect(Collectors.toSet()).
-                            size();
-                    int maxAllowedQuantity =organism.getMaxCount();
-                    if (maxAllowedQuantity <= countOfOrganismInCell)
-                        continue;
-                    int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
-                    int randomCount = 1+ Randomizer.getRandom(valueDifference);
-                    for (int i = 0; i < randomCount; i++) {
-                        Organism clone;
-                        try {
-                            clone = organism.clone();
-                        } catch (CloneNotSupportedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        organismSet.add(clone);
+                    organism.addTo(cell,organism);
                     }
-                }
                 finally {
                     cell.getLock().unlock();
                 }

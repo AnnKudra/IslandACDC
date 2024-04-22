@@ -48,28 +48,39 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
         if (isNotHere(cell))
             return false;
         List<Cell> availableCells = cell.getAvailableCells();
-        Organism clone;
         for (Cell availableCell : availableCells) {
             if (isMaxCountOfOrganismsIn(availableCell))
                 return false;
+            availableCell.getLock().lock();
             try {
-                clone = this.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
+                addTo(availableCell,this);
             }
-            return addTo(availableCell, clone);
+            finally {
+                availableCell.getLock().unlock();
+            }
         }
         return true;
     }
-        protected boolean addTo(Cell cell, Organism clone) {
-        cell.getLock().lock();
-        try {
+    public void addTo(Cell cell, Organism organism) {
             Set<Organism> organismSet = cell.getOrganismSet();
-            return organismSet.add(clone);
-        }
-        finally {
-            cell.getLock().unlock();
-        }
+            int countOfOrganismInCell = organismSet.stream().
+                    filter(o->o.getClass().equals(organism.getClass())).
+                    collect(Collectors.toSet()).
+                    size();
+            int maxAllowedQuantity =organism.getMaxCount();
+            int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
+            if (maxAllowedQuantity <= countOfOrganismInCell)
+                valueDifference = 0;
+            int randomCount = Randomizer.getRandom(valueDifference+1);
+            for (int i = 0; i < randomCount; i++) {
+                Organism clone;
+                try {
+                    clone = organism.clone();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+                organismSet.add(clone);
+            }
     }
 
     public boolean isMaxCountOfOrganismsIn(Cell cell) {
