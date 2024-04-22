@@ -96,7 +96,7 @@ public abstract class Animal extends Organism {
         if (speed == 0)
             return false;
         Cell nextCell = cell.findNextCell(cell,speed);
-        if (isMaxCountOfOrganismsIn(nextCell))
+        if (isMaxCountOfOrganismsIn(nextCell) || cell == nextCell)
             return false;
         relocate(nextCell, cell);
         return true;
@@ -112,11 +112,11 @@ public abstract class Animal extends Organism {
             finally {
                 cell.getLock().unlock();
             }
-//            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
-//            double weight = getWeight()-weightLoss;
-//            if (weight<=0)
-//                nextCell.getOrganismSet().remove(this);
-//            setWeight(weight);
+            /*double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
+            double weight = getWeight()-weightLoss;
+            if (weight<=0)
+                nextCell.getOrganismSet().remove(this);
+            setWeight(weight);*/
         }
         finally {
             nextCell.getLock().unlock();

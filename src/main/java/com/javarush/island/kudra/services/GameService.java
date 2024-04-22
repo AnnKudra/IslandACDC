@@ -22,7 +22,7 @@ public class GameService extends Thread{
 
     private void doOneStep() {
         ExecutorService executorService = Executors.newFixedThreadPool(Constants.COUNT_OF_CORES);
-        services.forEach(executorService::execute);
+        services.forEach(executorService::submit);
         executorService.shutdown();
         try {
             if (executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS))

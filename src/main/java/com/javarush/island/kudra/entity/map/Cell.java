@@ -38,11 +38,14 @@ public class Cell {
     }
     public Cell findNextCell(Cell cell, int speed) {
         Cell nextCell = cell;
+        Cell endCell = cell;
         for (int i = 0; i < speed; i++) {
             int countOfAvailableCells = nextCell.getAvailableCells().size();
             int indexOfNextCell = Randomizer.getRandom(countOfAvailableCells);
             nextCell = nextCell.getAvailableCells().get(indexOfNextCell);
-        }
-        return nextCell;
+            if (nextCell != cell)
+                endCell = nextCell;
+            }
+        return endCell;
     }
 }
