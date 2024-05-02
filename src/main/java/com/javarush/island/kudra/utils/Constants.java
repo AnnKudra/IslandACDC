@@ -19,15 +19,13 @@ public class Constants {
     public static final int BREEDING_PAIR = 2;
     public static final double NORM_WEIGHT_FACTOR = 0.8;
     public static final double WEIGHT_LOSS_PERCENT = 0.1;
-    public static final int FILLING_FREQUENCY = 100;
-    public static final int DELAY = 200;
+    public static final int FILLING_FREQUENCY = 10;
+    public static final int DELAY = 100;
     public static final int COUNT_OF_CORES = Runtime.getRuntime().availableProcessors();
-
     public static final String[] ORGANISM_NAME = {
             "Wolf", "Snake", "Fox", "Bear", "Eagle", "Horse", "Deer", "Rabbit",
             "Mouse", "Goat", "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar", "Grass"};
-
-    public static final Class<? extends Organism>[] ORGANISM_CLASS_NAME = new Class[]{
+     public static final Class<? extends Organism>[] ORGANISM_CLASS_NAME = new Class[]{
            Wolf.class, Snake.class, Fox.class, Bear.class, Eagle.class, Horse.class, Deer.class, Rabbit.class,
             Mouse.class, Goat.class, Sheep.class, Boar.class, Buffalo.class, Duck.class, Caterpillar.class, Grass.class};
     public static final int[][] EATING_PROBABILITY = new int[][]{

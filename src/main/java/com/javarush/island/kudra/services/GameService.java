@@ -10,8 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 public class GameService extends Thread{
     private final List<Runnable> services;
-    public GameService(List<Runnable> services) {
+    private final ViewService viewService;
+    public GameService(List<Runnable> services, ViewService viewService) {
         this.services = services;
+        this.viewService = viewService;
     }
 
     @Override
@@ -22,11 +24,14 @@ public class GameService extends Thread{
 
     private void doOneStep() {
         ExecutorService executorService = Executors.newFixedThreadPool(Constants.COUNT_OF_CORES);
-        services.forEach(executorService::submit);
+        services.forEach(executorService::execute);
         executorService.shutdown();
         try {
-            if (executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS))
-            System.out.println("-".repeat(155));
+
+            if (executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS)){
+                viewService.run();
+                System.out.println("-".repeat(150));
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

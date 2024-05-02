@@ -14,16 +14,15 @@ public class ConsoleRunner {
         GameMap gameMap = new GameMap(Constants.ROW, Constants.COL);
         Cell[][] cells = gameMap.getCells();
         Map<String, Integer> statistic = new HashMap<>();
-        RandomFillingService.randomFilling(gameMap.getCells());
+        ViewService viewService = new ViewService(statistic,cells);
+        RandomFillingService.randomFilling(cells);
         List<Runnable> services = List.of(
-                //new ViewService(statistic, cells),
-                //new RandomFillingService(cells),
-                //new ReproducingService(gameMap),
-                //new EatingService(gameMap),
-                new MovingService(gameMap),
-                new ViewService(statistic, cells)
+                new RandomFillingService(cells),
+                //new ReproducingService(gameMap)
+                new EatingService(gameMap),
+                new MovingService(gameMap)
         );
-        GameService gameService = new GameService(services);
+        GameService gameService = new GameService(services, viewService);
         gameService.start();
     }
 }

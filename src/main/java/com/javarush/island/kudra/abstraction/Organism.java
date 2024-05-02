@@ -8,6 +8,7 @@ import com.javarush.island.kudra.utils.Randomizer;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,16 +63,15 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
         return true;
     }
     public void addTo(Cell cell, Organism organism) {
+        cell.getLock().lock();
+        try {
             Set<Organism> organismSet = cell.getOrganismSet();
-            int countOfOrganismInCell = organismSet.stream().
-                    filter(o->o.getClass().equals(organism.getClass())).
-                    collect(Collectors.toSet()).
-                    size();
-            int maxAllowedQuantity =organism.getMaxCount();
+            int countOfOrganismInCell = countOfOrganisms(cell, organism.getClass());
+            int maxAllowedQuantity = organism.getMaxCount();
             int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
             if (maxAllowedQuantity <= countOfOrganismInCell)
                 valueDifference = 0;
-            int randomCount = Randomizer.getRandom(valueDifference+1);
+            int randomCount = Randomizer.getRandom(valueDifference + 1);
             for (int i = 0; i < randomCount; i++) {
                 Organism clone;
                 try {
@@ -81,6 +81,10 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
                 }
                 organismSet.add(clone);
             }
+        }
+        finally {
+            cell.getLock().unlock();
+        }
     }
 
     public boolean isMaxCountOfOrganismsIn(Cell cell) {
@@ -91,11 +95,13 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
     protected int countOfOrganisms(Cell cell, Class<? extends Organism> type) {
     cell.getLock().lock();
         try {
-            Set<Organism> organismSet = cell.getOrganismSet();
-            return organismSet.stream().
+            int size;
+            Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
+            size = organismSet.stream().
                     filter(organism -> organism.getClass().equals(type)).
                     collect(Collectors.toSet()).
                     size();
+            return size;
         } finally {
             cell.getLock().unlock();
         }

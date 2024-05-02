@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public abstract class Animal extends Organism {
         cell.getLock().lock();
         try {
         Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
-        Set<Organism> organismSet = cell.getOrganismSet();
+        Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
         Map<Organism, Integer> prey = new HashMap<>();
         for (Organism organism :
                 organismSet) {
@@ -104,19 +105,19 @@ public abstract class Animal extends Organism {
     private void relocate(Cell nextCell, Cell cell) {
         nextCell.getLock().lock();
         try {
-            nextCell.getOrganismSet().add(this);
             cell.getLock().lock();
             try {
+                nextCell.getOrganismSet().add(this);
                 cell.getOrganismSet().remove(this);
             }
             finally {
                 cell.getLock().unlock();
             }
-            /*double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
+            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
             double weight = getWeight()-weightLoss;
             if (weight<=0)
                 nextCell.getOrganismSet().remove(this);
-            setWeight(weight);*/
+            setWeight(weight);
         }
         finally {
             nextCell.getLock().unlock();
