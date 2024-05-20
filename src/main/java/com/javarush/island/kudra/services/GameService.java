@@ -27,10 +27,9 @@ public class GameService extends Thread{
         services.forEach(executorService::execute);
         executorService.shutdown();
         try {
-
             if (executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS)){
                 viewService.run();
-                System.out.println("-".repeat(150));
+                System.out.println("-".repeat(140));
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

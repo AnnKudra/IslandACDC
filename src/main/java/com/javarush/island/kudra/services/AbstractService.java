@@ -5,20 +5,22 @@ import com.javarush.island.kudra.entity.map.Cell;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import java.util.function.Consumer;
 
-public abstract class AbstractService implements Runnable{
-    protected void processOneCell(Cell cell, Consumer<Organism> action){
+public abstract class AbstractService implements Runnable {
+    protected void processOneCell(Cell cell, Consumer<Organism> action) {
         Set<Organism> allOrganisms = getSafeSet(cell);
         allOrganisms.forEach(action);
     }
-    private Set<Organism> getSafeSet(Cell cell){
+
+
+    public Set<Organism> getSafeSet(Cell cell) {
         cell.getLock().lock();
         try {
             Set<Organism> organismSet = cell.getOrganismSet();
             return new HashSet<>(organismSet);
-        }
-        finally {
+        } finally {
             cell.getLock().unlock();
         }
     }

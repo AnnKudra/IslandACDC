@@ -31,41 +31,46 @@ public abstract class Animal extends Organism {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        addTo(cell, child);
+        cell.addAsRelocate(child);
         return true;
     }
     private boolean canReproduce(Cell cell) {
-        int countOfOrganisms = countOfOrganisms(cell,this.getClass());
+        int countOfOrganisms = cell.getOrganismCount(getClass());
         return (countOfOrganisms > Constants.BREEDING_PAIR) && (getWeight() > getMaxWeight()/2);
     }
     @Override
     public boolean eat(Cell cell) {
-        if (isNotHere(cell) || !isHungry())
+        if (isNotHere(cell) || !isHungry(cell))
             return false;
-        while (!isNotHere(cell)|| isHungry()){
+        while (!isNotHere(cell) && isHungry(cell)){
         Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
         if (onePreyEntry == null || !caughtPrey(onePreyEntry))
             return false;
         killAndEat(cell, onePreyEntry);}
         return true;
     }
-    private boolean isHungry() {
+    private boolean isHungry(Cell cell) {
+        cell.getLock().lock();
+        try {
         double normalWeight = getMaxWeight()*Constants.NORM_WEIGHT_FACTOR;
     return getWeight() < normalWeight;
+    } finally {
+        cell.getLock().unlock();
+    }
     }
     private Map.Entry<Organism, Integer> findFood(Cell cell){
         cell.getLock().lock();
         try {
-        Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
-        Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
-        Map<Organism, Integer> prey = new HashMap<>();
-        for (Organism organism :
+            Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
+            Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
+            Map<Organism, Integer> prey = new HashMap<>();
+            for (Organism organism :
                 organismSet) {
             if (foodTypes.containsKey(organism.getName()))
                 prey.put(organism, foodTypes.get(organism.getName()));
         }
             return prey.entrySet().stream().findAny().orElse(null);
-    }
+        }
         finally {
             cell.getLock().unlock();
         }
@@ -76,14 +81,14 @@ public abstract class Animal extends Organism {
     }
     private void killAndEat(Cell cell, Map.Entry<Organism, Integer> onePreyEntry){
         cell.getLock().lock();
-        double preyWeight = onePreyEntry.getKey().getWeight();
+        Organism prey = onePreyEntry.getKey();
+        double preyWeight = prey.getWeight();
         try {
             if ((getWeight()+preyWeight) > getMaxWeight())
                 setWeight(getMaxWeight());
             else
                 setWeight(getWeight()+preyWeight);
-        Set<Organism> organismSet = cell.getOrganismSet();
-        organismSet.remove(onePreyEntry.getKey());
+        cell.remove(prey);
         }
         finally {
             cell.getLock().unlock();
@@ -107,8 +112,8 @@ public abstract class Animal extends Organism {
         try {
             cell.getLock().lock();
             try {
-                nextCell.getOrganismSet().add(this);
-                cell.getOrganismSet().remove(this);
+                nextCell.addAsRelocate(this);
+                cell.remove(this);
             }
             finally {
                 cell.getLock().unlock();

@@ -12,11 +12,14 @@ public class ReproducingService extends AbstractService {
 
     @Override
     public void run() {
+        long start = System.currentTimeMillis();
         Cell[][] cells = gameMap.getCells();
         for (Cell[] row : cells) {
             for (Cell cell : row) {
+                //В ячейке 20 лошадей. Для каждой мы спрашивам можно ли добавить в ячейку еще лошадь.
                 processOneCell(cell, organism -> organism.reproduce(cell));
             }
         }
+        System.out.println("ReproducingService: " + (System.currentTimeMillis() - start)/1000);
     }
 }

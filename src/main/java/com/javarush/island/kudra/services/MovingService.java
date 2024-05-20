@@ -11,11 +11,13 @@ public class MovingService extends AbstractService{
     }
     @Override
     public void run() {
+        long start = System.currentTimeMillis();
         Cell[][] cells = gameMap.getCells();
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 processOneCell(cell, organism -> organism.move(cell));
             }
         }
+        System.out.println("MovingService: " + (System.currentTimeMillis() - start)/1000);
     }
 }

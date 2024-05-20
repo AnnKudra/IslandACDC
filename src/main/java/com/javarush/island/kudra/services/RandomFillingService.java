@@ -18,7 +18,9 @@ public class RandomFillingService extends AbstractService {
         randomFilling(cells);
 
     }
-    public static void randomFilling(Cell[][] cells){
+
+    public static void randomFilling(Cell[][] cells) {
+        long start = System.currentTimeMillis();
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (!Randomizer.get(Constants.FILLING_FREQUENCY))
@@ -26,13 +28,13 @@ public class RandomFillingService extends AbstractService {
                 cell.getLock().lock();
                 try {
                     Organism organism = getRandomOrganism();
-                    organism.addTo(cell,organism);
-                    }
-                finally {
+                    cell.addAsReproduce(organism);
+                } finally {
                     cell.getLock().unlock();
                 }
             }
         }
+        System.out.println("RandomFillingService: " + (System.currentTimeMillis() - start) / 1000);
     }
 
     private static Organism getRandomOrganism() {

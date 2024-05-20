@@ -15,12 +15,11 @@ public class ConsoleRunner {
         Cell[][] cells = gameMap.getCells();
         Map<String, Integer> statistic = new HashMap<>();
         ViewService viewService = new ViewService(statistic,cells);
-        RandomFillingService.randomFilling(cells);
         List<Runnable> services = List.of(
-                new RandomFillingService(cells),
-                //new ReproducingService(gameMap)
-                new EatingService(gameMap),
-                new MovingService(gameMap)
+               new RandomFillingService(cells),
+               new ReproducingService(gameMap),
+               new EatingService(gameMap),
+               new MovingService(gameMap)
         );
         GameService gameService = new GameService(services, viewService);
         gameService.start();

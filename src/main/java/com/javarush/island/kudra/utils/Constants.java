@@ -17,10 +17,10 @@ public class Constants {
     public static final int ROW = 100;
     public static final int COL = 20;
     public static final int BREEDING_PAIR = 2;
-    public static final double NORM_WEIGHT_FACTOR = 0.8;
+    public static final double NORM_WEIGHT_FACTOR = 0.7;
     public static final double WEIGHT_LOSS_PERCENT = 0.1;
-    public static final int FILLING_FREQUENCY = 10;
-    public static final int DELAY = 100;
+    public static final int FILLING_FREQUENCY = 2;
+    public static final int DELAY = 500;
     public static final int COUNT_OF_CORES = Runtime.getRuntime().availableProcessors();
     public static final String[] ORGANISM_NAME = {
             "Wolf", "Snake", "Fox", "Bear", "Eagle", "Horse", "Deer", "Rabbit",

@@ -8,10 +8,8 @@ import com.javarush.island.kudra.utils.Randomizer;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 public abstract class Organism implements Cloneable, Reproducible, Eating, Movable {
@@ -53,59 +51,22 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
             if (isMaxCountOfOrganismsIn(availableCell))
                 return false;
             availableCell.getLock().lock();
-            try {
-                addTo(availableCell,this);
+                try {
+                    availableCell.addAsReproduce(this);
+                } finally {
+                    availableCell.getLock().unlock();
+                }
             }
-            finally {
-                availableCell.getLock().unlock();
-            }
-        }
         return true;
     }
-    public void addTo(Cell cell, Organism organism) {
-        cell.getLock().lock();
-        try {
-            Set<Organism> organismSet = cell.getOrganismSet();
-            int countOfOrganismInCell = countOfOrganisms(cell, organism.getClass());
-            int maxAllowedQuantity = organism.getMaxCount();
-            int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
-            if (maxAllowedQuantity <= countOfOrganismInCell)
-                valueDifference = 0;
-            int randomCount = Randomizer.getRandom(valueDifference + 1);
-            for (int i = 0; i < randomCount; i++) {
-                Organism clone;
-                try {
-                    clone = organism.clone();
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
-                organismSet.add(clone);
-            }
-        }
-        finally {
-            cell.getLock().unlock();
-        }
-    }
+
 
     public boolean isMaxCountOfOrganismsIn(Cell cell) {
-        int countOfOrganisms = countOfOrganisms(cell, this.getClass());
+        int countOfOrganisms = cell.getOrganismCount(this.getClass());
         return countOfOrganisms >= this.maxCount;
     }
 
-    protected int countOfOrganisms(Cell cell, Class<? extends Organism> type) {
-    cell.getLock().lock();
-        try {
-            int size;
-            Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
-            size = organismSet.stream().
-                    filter(organism -> organism.getClass().equals(type)).
-                    collect(Collectors.toSet()).
-                    size();
-            return size;
-        } finally {
-            cell.getLock().unlock();
-        }
-    }
+
     protected boolean isNotHere(Cell cell){
     cell.getLock().lock();
         try {
