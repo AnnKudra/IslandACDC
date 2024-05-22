@@ -1,6 +1,6 @@
 package com.javarush.island.kudra.exception;
 
-public class ApplicationException extends RuntimeException{
+public class ApplicationException extends RuntimeException {
     public ApplicationException() {
     }
 

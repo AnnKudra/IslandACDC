@@ -14,7 +14,6 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-
 @Getter
 public class Cell {
     private final List<Cell> availableCells = new ArrayList<>();
@@ -42,21 +41,23 @@ public class Cell {
             }
         }
     }
-    public void searchAvailableCells(GameMap gameMap, int row, int col){
+
+    public void searchAvailableCells(GameMap gameMap, int row, int col) {
         Cell[][] cells = gameMap.getCells();
-        if (row>0){
-            availableCells.add(cells[row-1][col]);
+        if (row > 0) {
+            availableCells.add(cells[row - 1][col]);
         }
-        if (col>0){
-            availableCells.add(cells[row][col-1]);
+        if (col > 0) {
+            availableCells.add(cells[row][col - 1]);
         }
-        if (row<gameMap.getRows()-1){
-            availableCells.add(cells[row+1][col]);
+        if (row < gameMap.getRows() - 1) {
+            availableCells.add(cells[row + 1][col]);
         }
-        if (col< gameMap.getCols()-1){
-            availableCells.add(cells[row][col+1]);
+        if (col < gameMap.getCols() - 1) {
+            availableCells.add(cells[row][col + 1]);
         }
     }
+
     public Cell findNextCell(Cell cell, int speed) {
         Cell nextCell = cell;
         Cell endCell = cell;
@@ -66,11 +67,11 @@ public class Cell {
             nextCell = nextCell.getAvailableCells().get(indexOfNextCell);
             if (nextCell != cell)
                 endCell = nextCell;
-            }
+        }
         return endCell;
     }
 
-    public int getOrganismCount(Class<? extends Organism> type){
+    public int getOrganismCount(Class<? extends Organism> type) {
         return organismCounter.getOrDefault(type, 0);
     }
 
@@ -79,9 +80,28 @@ public class Cell {
         Integer currentCount = organismCounter.get(organism.getClass());
         organismCounter.put(organism.getClass(), --currentCount);
     }
+
     public void addAsRelocate(Organism organism) {
         organismSet.add(organism);
         int currentCount = getOrganismCount(organism.getClass());
         organismCounter.put(organism.getClass(), ++currentCount);
+    }
+
+    public void addPlant(Organism organism) {
+        int countOfOrganismInCell = getOrganismCount(organism.getClass());
+        int maxAllowedQuantity = organism.getMaxCount();
+        int valueDifference = maxAllowedQuantity - countOfOrganismInCell;
+        if (valueDifference > 0) {
+            for (int i = 0; i < valueDifference; i++) {
+                Organism clone;
+                try {
+                    clone = organism.clone();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+                organismSet.add(clone);
+                organismCounter.put(organism.getClass(), ++countOfOrganismInCell);
+            }
+        }
     }
 }

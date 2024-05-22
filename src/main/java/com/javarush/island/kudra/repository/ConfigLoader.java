@@ -8,8 +8,8 @@ import com.javarush.island.kudra.utils.Config;
 import java.net.URL;
 
 public class ConfigLoader {
-    public static Organism createOrganism(Class<? extends Organism> type){
-        if (!type.isAnnotationPresent(Config.class)){
+    public static Organism createOrganism(Class<? extends Organism> type) {
+        if (!type.isAnnotationPresent(Config.class)) {
             throw new ApplicationException(String.format("Class %s must have Config annotation", type.getSimpleName()));
         }
         URL filePath = getConfigFilePath(type);
@@ -20,11 +20,12 @@ public class ConfigLoader {
         Config config = type.getAnnotation(Config.class);
         return type.getClassLoader().getResource(config.filePath());
     }
-    public static Organism loadObject(URL filePath, Class<? extends Organism> type){
+
+    public static Organism loadObject(URL filePath, Class<? extends Organism> type) {
         YAMLMapper mapper = new YAMLMapper();
         Organism organism;
         try {
-            organism = mapper.readValue(filePath,type);
+            organism = mapper.readValue(filePath, type);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

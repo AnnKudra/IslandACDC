@@ -18,7 +18,6 @@ public class ViewService implements Runnable {
 
     @Override
     public void run() {
-        long start = System.currentTimeMillis();
         displayStatistics(cells);
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Integer> entry : statistic.entrySet()) {
@@ -27,7 +26,6 @@ public class ViewService implements Runnable {
             sb.append(entry.getValue());
             sb.append(" ");
         }
-//        System.out.println("ViewService: " + (System.currentTimeMillis() - start) / 1000);
         System.out.println(sb);
     }
 

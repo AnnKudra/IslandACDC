@@ -52,21 +52,17 @@ public abstract class Organism implements Cloneable, Reproducible, Eating, Movab
                 return false;
             availableCell.getLock().lock();
                 try {
-                    availableCell.addAsReproduce(this);
+                    availableCell.addPlant(this);
                 } finally {
                     availableCell.getLock().unlock();
                 }
             }
         return true;
     }
-
-
     public boolean isMaxCountOfOrganismsIn(Cell cell) {
         int countOfOrganisms = cell.getOrganismCount(this.getClass());
         return countOfOrganisms >= this.maxCount;
     }
-
-
     protected boolean isNotHere(Cell cell){
     cell.getLock().lock();
         try {

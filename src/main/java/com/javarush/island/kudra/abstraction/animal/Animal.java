@@ -19,6 +19,7 @@ public abstract class Animal extends Organism {
     @Getter
     @Setter
     private int maxSpeed;
+
     @Override
     public boolean reproduce(Cell cell) {
         if (isNotHere(cell) || isMaxCountOfOrganismsIn(cell) || !canReproduce(cell))
@@ -26,7 +27,7 @@ public abstract class Animal extends Organism {
         Organism child;
         try {
             child = this.clone();
-            double childWeight = getWeight()/2;
+            double childWeight = getWeight() / 2;
             child.setWeight(childWeight);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -34,98 +35,84 @@ public abstract class Animal extends Organism {
         cell.addAsRelocate(child);
         return true;
     }
+
     private boolean canReproduce(Cell cell) {
         int countOfOrganisms = cell.getOrganismCount(getClass());
-        return (countOfOrganisms > Constants.BREEDING_PAIR) && (getWeight() > getMaxWeight()/2);
+        return (countOfOrganisms > Constants.BREEDING_PAIR) && (getWeight() > getMaxWeight() / 2);
     }
+
     @Override
     public boolean eat(Cell cell) {
-        if (isNotHere(cell) || !isHungry(cell))
+        if (isNotHere(cell) || !isHungry())
             return false;
-        while (!isNotHere(cell) && isHungry(cell)){
-        Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
-        if (onePreyEntry == null || !caughtPrey(onePreyEntry))
-            return false;
-        killAndEat(cell, onePreyEntry);}
+        while (!isNotHere(cell) && isHungry()) {
+            Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
+            if (onePreyEntry == null || !caughtPrey(onePreyEntry))
+                return false;
+            killAndEat(cell, onePreyEntry);
+        }
         return true;
     }
-    private boolean isHungry(Cell cell) {
-        cell.getLock().lock();
-        try {
-        double normalWeight = getMaxWeight()*Constants.NORM_WEIGHT_FACTOR;
-    return getWeight() < normalWeight;
-    } finally {
-        cell.getLock().unlock();
+
+    private boolean isHungry() {
+        double normalWeight = getMaxWeight() * Constants.NORM_WEIGHT_FACTOR;
+        return getWeight() < normalWeight;
     }
-    }
-    private Map.Entry<Organism, Integer> findFood(Cell cell){
-        cell.getLock().lock();
-        try {
-            Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
-            Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
-            Map<Organism, Integer> prey = new HashMap<>();
-            for (Organism organism :
+
+    private Map.Entry<Organism, Integer> findFood(Cell cell) {
+        Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
+        Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
+        Map<Organism, Integer> prey = new HashMap<>();
+        for (Organism organism :
                 organismSet) {
             if (foodTypes.containsKey(organism.getName()))
                 prey.put(organism, foodTypes.get(organism.getName()));
         }
-            return prey.entrySet().stream().findAny().orElse(null);
-        }
-        finally {
-            cell.getLock().unlock();
-        }
+        return prey.entrySet().stream().findAny().orElse(null);
     }
+
     private boolean caughtPrey(Map.Entry<Organism, Integer> onePreyEntry) {
         int percentageProbability = onePreyEntry.getValue();
         return Randomizer.get(percentageProbability);
     }
-    private void killAndEat(Cell cell, Map.Entry<Organism, Integer> onePreyEntry){
-        cell.getLock().lock();
+
+    private void killAndEat(Cell cell, Map.Entry<Organism, Integer> onePreyEntry) {
         Organism prey = onePreyEntry.getKey();
         double preyWeight = prey.getWeight();
-        try {
-            if ((getWeight()+preyWeight) > getMaxWeight())
-                setWeight(getMaxWeight());
-            else
-                setWeight(getWeight()+preyWeight);
+        if ((getWeight() + preyWeight) > getMaxWeight())
+            setWeight(getMaxWeight());
+        else
+            setWeight(getWeight() + preyWeight);
         cell.remove(prey);
-        }
-        finally {
-            cell.getLock().unlock();
-        }
     }
+
     @Override
     public boolean move(Cell cell) {
         if (isNotHere(cell))
             return false;
-        int speed = Randomizer.getRandom(getMaxSpeed()+1);
+        int speed = Randomizer.getRandom(getMaxSpeed() + 1);
         if (speed == 0)
             return false;
-        Cell nextCell = cell.findNextCell(cell,speed);
-        if (isMaxCountOfOrganismsIn(nextCell) || cell == nextCell)
-            return false;
-        relocate(nextCell, cell);
+        Cell nextCell = cell.findNextCell(cell, speed);
+        if (nextCell.getLock().tryLock()) {
+            try {
+                if (isMaxCountOfOrganismsIn(nextCell) || cell == nextCell)
+                    return false;
+                relocate(nextCell, cell);
+            } finally {
+                nextCell.getLock().unlock();
+            }
+        }
         return true;
     }
+
     private void relocate(Cell nextCell, Cell cell) {
-        nextCell.getLock().lock();
-        try {
-            cell.getLock().lock();
-            try {
-                nextCell.addAsRelocate(this);
-                cell.remove(this);
-            }
-            finally {
-                cell.getLock().unlock();
-            }
-            double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
-            double weight = getWeight()-weightLoss;
-            if (weight<=0)
-                nextCell.getOrganismSet().remove(this);
-            setWeight(weight);
-        }
-        finally {
-            nextCell.getLock().unlock();
-        }
+        nextCell.addAsRelocate(this);
+        cell.remove(this);
+        double weightLoss = getWeight() * Constants.WEIGHT_LOSS_PERCENT;
+        double weight = getWeight() - weightLoss;
+        if (weight <= 0)
+            nextCell.remove(this);
+        setWeight(weight);
     }
 }
