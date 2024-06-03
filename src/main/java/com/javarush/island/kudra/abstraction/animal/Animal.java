@@ -19,6 +19,7 @@ public abstract class Animal extends Organism {
     @Getter
     @Setter
     private int maxSpeed;
+    Organism previousOrganism = new Organism() {};
 
     @Override
     public boolean reproduce(Cell cell) {
@@ -43,10 +44,16 @@ public abstract class Animal extends Organism {
 
     @Override
     public boolean eat(Cell cell) {
+        if (previousOrganism.getClass().equals(this.getClass()))
+            return false;
         if (isNotHere(cell) || !isHungry())
             return false;
         while (!isNotHere(cell) && isHungry()) {
-            Map.Entry<Organism, Integer> onePreyEntry = findFood(cell);
+            if (findFood(cell).isEmpty()) {
+                previousOrganism = this;
+                return false;
+            }
+            Map.Entry<Organism, Integer> onePreyEntry = findFood(cell).entrySet().stream().findAny().orElse(null);
             if (onePreyEntry == null || !caughtPrey(onePreyEntry))
                 return false;
             killAndEat(cell, onePreyEntry);
@@ -59,7 +66,7 @@ public abstract class Animal extends Organism {
         return getWeight() < normalWeight;
     }
 
-    private Map.Entry<Organism, Integer> findFood(Cell cell) {
+    private Map <Organism, Integer> findFood(Cell cell) {
         Set<Organism> organismSet = new HashSet<>(cell.getOrganismSet());
         Map<String, Integer> foodTypes = Constants.getFOOD_MAP().get(getName());
         Map<Organism, Integer> prey = new HashMap<>();
@@ -68,7 +75,7 @@ public abstract class Animal extends Organism {
             if (foodTypes.containsKey(organism.getName()))
                 prey.put(organism, foodTypes.get(organism.getName()));
         }
-        return prey.entrySet().stream().findAny().orElse(null);
+        return prey;
     }
 
     private boolean caughtPrey(Map.Entry<Organism, Integer> onePreyEntry) {
